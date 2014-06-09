@@ -168,6 +168,15 @@ add_action('wp_ajax_dbs_pull', 'dbs_pull');
 function dbs_pull() {
 	//dump DB and GZip it
 	header('Content-type: application/octet-stream');
+	if ($_GET['dump'] == 'manual') {
+		//manual dump, so include attachment headers
+		header('Content-Description: File Transfer');
+	        header('Content-Disposition: attachment; filename=data.sql');
+	        header('Content-Transfer-Encoding: binary');
+	        header('Expires: 0');
+	        header('Cache-Control: must-revalidate');
+	        header('Pragma: public');
+	}
 	dbs_mysqldump();
 	exit;
 }
