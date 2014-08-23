@@ -46,7 +46,7 @@
 		<tr valign="top">
 			<th scope="row">Dump database manually</th>
 			<td>
-				<a href="<?php echo admin_url('admin-ajax.php?action=dbs_pull'); ?>" target="_blank" class="button">Dump</a>
+				<a href="<?php echo admin_url('admin-ajax.php?action=dbs_pull&dump=manual'); ?>" target="_blank" class="button">Dump</a>
 			</td>
 		</tr>
 	</table>
