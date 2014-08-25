@@ -107,10 +107,9 @@ function dbs_makeBackup() {
 function dbs_mysqldump() {
 	global $wpdb;
 	$sql = "SHOW TABLES;";
-	// $result = $wpdb->query($sql);
 	echo '/* Dump of database '.DB_NAME.' on '.$_SERVER['HTTP_HOST'].' at '.date('Y-m-d H:i:s')." */\n\n";
 	$results = $wpdb->get_results($sql, ARRAY_N);
-	while ($row = array_shift($results)) {
+	foreach ($results as $row) {
 		echo dbs_mysqldump_table_structure($row[0]);
 		echo dbs_mysqldump_table_data($row[0]);
 	}
@@ -130,9 +129,7 @@ function dbs_mysqldump_table_structure($table) {
 	$sql = "SHOW CREATE TABLE `$table`; ";
 	$result = $wpdb->get_results($sql, ARRAY_A);
 	if ($result) {
-		// if ($row = mysql_fetch_assoc($result)) {
-			echo $result[0]['Create Table'] . ";\n\n";
-		// }
+	    echo $result[0]['Create Table'] . ";\n\n";
 	}
 	$wpdb->flush();
 }
@@ -154,16 +151,10 @@ function dbs_mysqldump_table_data($table) {
 		if ($num_rows > 0) {
 			echo "/* dumping data for table `$table` */\n";
 			$field_type = $wpdb->get_col_info();
-			// $i = 0;
-			// while ($i < $num_fields) {
-				// $meta = mysql_fetch_field($result, $i);
-				// array_push($field_type, $meta->type);
-				// $i++;
-			// }
 			$maxInsertSize = 100000;
 			$index = 0;
 			$statementSql = '';
-			while ($row = array_shift($result)) {
+			foreach ($result as $row) {
 				if (!$statementSql) $statementSql .= "INSERT INTO `$table` VALUES\n";
 				$statementSql .= "(";
 				for ($i = 0; $i < $num_fields; $i++) {

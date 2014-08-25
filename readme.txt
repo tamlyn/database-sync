@@ -41,6 +41,11 @@ You are now set up to pull from and push to the main server.
 
 == ChangeLog ==
 
+= Version 0.3 =
+
+* Use `$wpdb` instead of deprecated `mysqli` extension. Thanks to Simon East.
+* Fixed manual dump download filename. Thanks to Ronald Mansveld.
+
 = Version 0.2 =
 
 * Initial public release.
