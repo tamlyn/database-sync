@@ -38,11 +38,12 @@ function dbs_stripHttp($url) {
  * @param $sql string SQL dump
  */
 function dbs_loadSql($sql) {
-	$sql = preg_replace("|/\*.+\*/\n|", "", $sql);
+	$sql = preg_replace("|/\*.+\*/\\n|", "", $sql);
 	$queries = explode(";\n", $sql);
 	foreach ($queries as $query) {
 		if (!trim($query)) continue;
-		if (mysql_query($query) === false) {
+		global $wpdb;
+		if ($wpdb->query($query) === false) {
 			return false;
 		}
 	}
@@ -104,14 +105,16 @@ function dbs_makeBackup() {
  * Original code (c)2006 Huang Kai <hkai@atutility.com>
  */
 function dbs_mysqldump() {
+	global $wpdb;
 	$sql = "SHOW TABLES;";
-	$result = mysql_query($sql);
+	// $result = $wpdb->query($sql);
 	echo '/* Dump of database '.DB_NAME.' on '.$_SERVER['HTTP_HOST'].' at '.date('Y-m-d H:i:s')." */\n\n";
-	while ($row = mysql_fetch_row($result)) {
+	$results = $wpdb->get_results($sql, ARRAY_N);
+	while ($row = array_shift($results)) {
 		echo dbs_mysqldump_table_structure($row[0]);
 		echo dbs_mysqldump_table_data($row[0]);
 	}
-	mysql_free_result($result);
+	$wpdb->flush();
 }
 
 /**
@@ -120,17 +123,18 @@ function dbs_mysqldump() {
  * @return string SQL
  */
 function dbs_mysqldump_table_structure($table) {
+	global $wpdb;
 	echo "/* Table structure for table `$table` */\n\n";
 	echo "DROP TABLE IF EXISTS `$table`;\n\n";
 
 	$sql = "SHOW CREATE TABLE `$table`; ";
-	$result = mysql_query($sql);
+	$result = $wpdb->get_results($sql, ARRAY_A);
 	if ($result) {
-		if ($row = mysql_fetch_assoc($result)) {
-			echo $row['Create Table'] . ";\n\n";
-		}
+		// if ($row = mysql_fetch_assoc($result)) {
+			echo $result[0]['Create Table'] . ";\n\n";
+		// }
 	}
-	mysql_free_result($result);
+	$wpdb->flush();
 }
 
 /**
@@ -139,26 +143,27 @@ function dbs_mysqldump_table_structure($table) {
  * @return string SQL
  */
 function dbs_mysqldump_table_data($table) {
+	global $wpdb;
 	$sql = "SELECT * FROM `$table`;";
-	$result = mysql_query($sql);
+	$result = $wpdb->get_results($sql, ARRAY_N);
 
 	echo '';
 	if ($result) {
-		$num_rows = mysql_num_rows($result);
-		$num_fields = mysql_num_fields($result);
+		$num_rows = count($result);
+		$num_fields = count($result[0]);
 		if ($num_rows > 0) {
 			echo "/* dumping data for table `$table` */\n";
-			$field_type = array();
-			$i = 0;
-			while ($i < $num_fields) {
-				$meta = mysql_fetch_field($result, $i);
-				array_push($field_type, $meta->type);
-				$i++;
-			}
+			$field_type = $wpdb->get_col_info();
+			// $i = 0;
+			// while ($i < $num_fields) {
+				// $meta = mysql_fetch_field($result, $i);
+				// array_push($field_type, $meta->type);
+				// $i++;
+			// }
 			$maxInsertSize = 100000;
 			$index = 0;
 			$statementSql = '';
-			while ($row = mysql_fetch_row($result)) {
+			while ($row = array_shift($result)) {
 				if (!$statementSql) $statementSql .= "INSERT INTO `$table` VALUES\n";
 				$statementSql .= "(";
 				for ($i = 0; $i < $num_fields; $i++) {
@@ -172,7 +177,7 @@ function dbs_mysqldump_table_data($table) {
 							case 'string':
 							case 'blob' :
 							default:
-								$statementSql .= "'" . mysql_real_escape_string($row[$i]) . "'";
+								$statementSql .= "'" . $wpdb->_real_escape($row[$i]) . "'";
 
 						}
 					}
@@ -192,7 +197,7 @@ function dbs_mysqldump_table_data($table) {
 			}
 		}
 	}
-	mysql_free_result($result);
+	$wpdb->flush();
 	echo "\n";
 }
 
