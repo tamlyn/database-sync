@@ -1,13 +1,13 @@
-=== Database Sync ===
-Contributors: tamlyn
-Tags: database, db, sync, synch, copy, deploy, stage
-Requires at least: 3.0
-Tested up to: 3.4
-Stable tag: 0.3
+# Database Sync #
+**Contributors:** tamlyn
+**Tags:** database, db, sync, synch, copy, deploy, stage
+**Requires at least:** 3.0
+**Tested up to:** 3.4
+**Stable tag:** 0.3
 
 Sync databases across servers with a single click.
 
-== Description ==
+## Description ##
 
 **WARNING:** This plugin is for advanced users. If used incorrectly it could wipe out *all your content*!
 
@@ -17,19 +17,19 @@ or push the entire database between servers with just a click.
 
 Currently syncs database only, not uploaded files.
 
-= Backups =
+### Backups ###
 
 The plugin will attempt to make local backups of the database before overwriting. These are stored as gzipped SQL
 files in wp-content/plugins/database-sync/backups/dbYYYYMMDD.HHMMSS.sql.gz The backups directory should be made
 writable, and you should keep an eye on it if you sync often as it will grow in size.
 
-= Usage =
+### Usage ###
 
 See Installation instructions.
 
 [Plugin by Outlandish Ideas](http://outlandishideas.co.uk/)
 
-== Installation ==
+## Installation ##
 
 1. Install as usual.
 2. Activate plugin.
@@ -39,12 +39,12 @@ See Installation instructions.
 
 You are now set up to pull from and push to the main server.
 
-== ChangeLog ==
+## ChangeLog ##
 
-= Version 0.2 =
+### Version 0.2 ###
 
 * Initial public release.
 
-= Version 0.1 =
+### Version 0.1 ###
 
 * Internal testing.
