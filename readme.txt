@@ -2,8 +2,8 @@
 Contributors: tamlyn
 Tags: database, db, sync, synch, copy, deploy, stage
 Requires at least: 3.0
-Tested up to: 3.4
-Stable tag: 0.3
+Tested up to: 4.0
+Stable tag: 0.3.1
 
 Sync databases across servers with a single click.
 
@@ -27,7 +27,7 @@ writable, and you should keep an eye on it if you sync often as it will grow in 
 
 See Installation instructions.
 
-[Plugin by Outlandish Ideas](http://outlandishideas.co.uk/)
+[Plugin by Outlandish](http://outlandish.com)
 
 == Installation ==
 
@@ -40,6 +40,10 @@ See Installation instructions.
 You are now set up to pull from and push to the main server.
 
 == ChangeLog ==
+
+= Version 0.3.1 = 
+
+* Fixed E_NOTICE warning. Thanks to miniragnarok.
 
 = Version 0.3 =
 

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Database Sync
 Description: Sync databases across servers with a single click.
-Version: 0.3
+Version: 0.3.1
 Author: tamlyn
 */
 
