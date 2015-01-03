@@ -3,7 +3,7 @@ Contributors: tamlyn
 Tags: database, db, sync, synch, copy, deploy, stage
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 0.3.1
+Stable tag: 0.4
 
 Sync databases across servers with a single click.
 
@@ -40,6 +40,10 @@ See Installation instructions.
 You are now set up to pull from and push to the main server.
 
 == ChangeLog ==
+
+= Version 0.4 =
+
+* Support for dumping and syncing MySQL VIEWs.
 
 = Version 0.3.1 = 
 

@@ -110,8 +110,7 @@ function dbs_mysqldump() {
 	echo '/* Dump of database '.DB_NAME.' on '.$_SERVER['HTTP_HOST'].' at '.date('Y-m-d H:i:s')." */\n\n";
 	$results = $wpdb->get_results($sql, ARRAY_N);
 	foreach ($results as $row) {
-		echo dbs_mysqldump_table_structure($row[0]);
-		echo dbs_mysqldump_table_data($row[0]);
+		echo dbs_mysqldump_table($row[0]);
 	}
 	$wpdb->flush();
 }
@@ -121,30 +120,27 @@ function dbs_mysqldump() {
  * @param $table string Table name
  * @return string SQL
  */
-function dbs_mysqldump_table_structure($table) {
+function dbs_mysqldump_table($table) {
 	global $wpdb;
 	echo "/* Table structure for table `$table` */\n\n";
-	echo "DROP TABLE IF EXISTS `$table`;\n\n";
 
 	$sql = "SHOW CREATE TABLE `$table`; ";
 	$result = $wpdb->get_results($sql, ARRAY_A);
 	if ($result) {
+        if (isset($result[0]['View'])) {
+            echo "DROP VIEW IF EXISTS `$table`;\n\n";
+            echo $result[0]['Create View'] . ";\n\n";
+            return;
+        }
+
+	    echo "DROP TABLE IF EXISTS `$table`;\n\n";
 	    echo $result[0]['Create Table'] . ";\n\n";
 	}
 	$wpdb->flush();
-}
 
-/**
- * Original code (c)2006 Huang Kai <hkai@atutility.com>
- * @param $table string Table name
- * @return string SQL
- */
-function dbs_mysqldump_table_data($table) {
-	global $wpdb;
 	$sql = "SELECT * FROM `$table`;";
 	$result = $wpdb->get_results($sql, ARRAY_N);
 
-	echo '';
 	if ($result) {
 		$num_rows = count($result);
 		$num_fields = count($result[0]);
