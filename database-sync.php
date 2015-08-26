@@ -2,7 +2,7 @@
 /*
 Plugin Name: Database Sync
 Description: Sync databases across servers with a single click.
-Version: 0.5
+Version: 0.5.1
 Author: tamlyn
 */
 
@@ -29,7 +29,7 @@ function dbs_admin_ui() {
 	$action = isset($_REQUEST['dbs_action']) ? $_REQUEST['dbs_action'] : 'index';
 	switch ($action) {
 		case 'sync' :
-			$url = htmlspecialchars($_GET['url']);
+			$url = esc_url($_GET['url']);
 			include 'sync-screen.php';
 			break;
 		default :
