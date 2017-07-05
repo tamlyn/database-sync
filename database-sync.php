@@ -232,7 +232,7 @@ function dbs_push() {
  */
 function dbs_cacheOptions() {
 	//persist these options
-	$defaultOptions = array('siteurl', 'home', 'outlandish_sync_tokens', 'outlandish_sync_secret');
+	$defaultOptions = array('siteurl', 'home', 'outlandish_sync_tokens', 'outlandish_sync_secret', 'active_plugins');
 	$persistOptions = apply_filters('dbs_persist_options', $defaultOptions);
 
 	$optionCache = array();
