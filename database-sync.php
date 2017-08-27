@@ -51,7 +51,7 @@ function dbs_post_actions() {
 	$tokens = get_option('outlandish_sync_tokens') ? : array();
 
 	// Maintain site links
-	$localURL = get_site_url();
+	$localURL = get_home_url();
 
 	switch ($_REQUEST['dbs_action']) {
 		//add a token
