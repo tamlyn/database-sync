@@ -50,6 +50,9 @@ function dbs_post_actions() {
 
 	$tokens = get_option('outlandish_sync_tokens') ? : array();
 
+	// Maintain site links
+	$localURL = get_home_url();
+
 	switch ($_REQUEST['dbs_action']) {
 		//add a token
 		case 'add' :
@@ -85,7 +88,9 @@ function dbs_post_actions() {
 					$gotoUrl = dbs_url(array('error' => 'Sync failed. Is the plugin activated on the remote server?'));
 				} else {
 
-					$sql = $result;
+					// Maintain site link
+					$sql = str_replace( $_REQUEST['url'], $localURL, $result );
+
 					if ($sql && preg_match('|^/\* Dump of database |', $sql)) {
 
 						//backup current database
@@ -127,6 +132,9 @@ function dbs_post_actions() {
 			ob_start();
 			dbs_mysqldump();
 			$sql = ob_get_clean();
+
+			// Maintain site links
+			$sql = str_replace( $localURL, $_REQUEST['url'], $sql );
 
 			try {
 				//send post request with secret and SQL data
@@ -172,11 +180,11 @@ function dbs_pull() {
 		if ($_GET['dump'] == 'manual') {
 			//manual dump, so include attachment headers
 			header('Content-Description: File Transfer');
-		        header('Content-Disposition: attachment; filename=data.sql');
-		        header('Content-Transfer-Encoding: binary');
-		        header('Expires: 0');
-		        header('Cache-Control: must-revalidate');
-		        header('Pragma: public');
+				header('Content-Disposition: attachment; filename=data.sql');
+				header('Content-Transfer-Encoding: binary');
+				header('Expires: 0');
+				header('Cache-Control: must-revalidate');
+				header('Pragma: public');
 		}
 	}
 	dbs_mysqldump();
@@ -224,7 +232,7 @@ function dbs_push() {
  */
 function dbs_cacheOptions() {
 	//persist these options
-	$defaultOptions = array('siteurl', 'home', 'outlandish_sync_tokens', 'outlandish_sync_secret');
+	$defaultOptions = array('siteurl', 'home', 'outlandish_sync_tokens', 'outlandish_sync_secret', 'active_plugins');
 	$persistOptions = apply_filters('dbs_persist_options', $defaultOptions);
 
 	$optionCache = array();
